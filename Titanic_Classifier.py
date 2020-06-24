@@ -177,7 +177,7 @@ sns.countplot(x='Survived',hue='Sex',data=train_clean,palette='rainbow')
 # In[28]:
 
 
-#passenger classwise survival 
+#passenger classwise survival
 sns.set_style('whitegrid')
 sns.countplot(x='Survived',hue='Pclass',data=train_clean,palette='rainbow')
 
@@ -203,7 +203,7 @@ train_clean.info()
 # In[30]:
 
 
-#passenger classwise survival 
+#passenger classwise survival
 sns.set_style('whitegrid')
 sns.countplot(x='Survived',hue='Pclass',data=train_clean,palette='rainbow')
 
@@ -388,8 +388,32 @@ print(scores_gbc)
 print(accuracy_cross_gbc)
 
 
-# In[ ]:
+#Hyperparameter Tuning in svm
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+from sklearn.model_selection import GridSearchCV
 
+x_train,x_test,y_train,y_test=train_test_split(new_train.drop('Survived',axis=1),new_train['Survived'],test_size=0.30,random_state=50)
 
+svm_model=SVC(kernel='linear',random_state=0)
+svm_model.fit(x_train,y_train)
+y_predict=svm_model.predict(x_test)
+accuracy_svm=accuracy_score(y_test,y_predict)
+print(accuracy_svm)
+#Apply GridSearchCV
+parameter=[{'C':[1,10,100,1000],'kernel':['linear']},{'C':[1,10,100,1000],'kernel':['rbf'],'gamma':[0.1,0.2,0.3,0.4,0.5,0.6,0.7]}]
 
-
+grid_search=GridSearchCV(estimator=svm_model,
+                        param_grid=parameter,
+                        scoring='accuracy',
+                        cv=10,
+                        n_jobs=-1)
+grid_search=grid_search.fit(x_train,y_train)
+accuracy=grid_search.best_score_
+accuracy
+grid_search.best_params_
+svm_model=SVC(kernel='linear',C=1000)
+svm_model.fit(x_train,y_train)
+y_predict=svm_model.predict(x_test)
+accuracy_svm=accuracy_score(y_test,y_predict)
+print(accuracy_svm)
