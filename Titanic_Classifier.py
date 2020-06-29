@@ -417,3 +417,16 @@ svm_model.fit(x_train,y_train)
 y_predict=svm_model.predict(x_test)
 accuracy_svm=accuracy_score(y_test,y_predict)
 print(accuracy_svm)
+
+
+
+#Hyperparameter Tuning for Gradient Boosting Classifier
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import accuracy_score
+parameter1 = {'learning_rate':[0.15,0.1,0.05,0.01,0.005,0.001], 'n_estimators':[100,250,500,750,1000,1250,1500,1750]}
+
+tuning1 = GridSearchCV(estimator =GradientBoostingClassifier(random_state=10),
+            param_grid = parameter1, scoring='accuracy',n_jobs=4,iid=False, cv=8)
+tuning1.fit(x_train,y_train)
+tuning1.best_params_
+tuning1.best_score_
